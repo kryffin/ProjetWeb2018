@@ -4,6 +4,8 @@
 <head>
 	  <meta charset="utf-8" />
     <title>Recettes - Ingrédients</title>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="/resources/demos/style.css">
 </head>
 
 <body>
@@ -33,7 +35,7 @@
 
   //barre de recherche
   echo "<form autocomplete=\"off\" action=\"index_page.php\" method=\"get\">
-    <input type=\"text\" name=\"current\" placeholder=\"Recherche moi vas-y!\"/>
+    <input id =\"recherche\" type=\"text\" name=\"current\" placeholder=\"Recherche moi vas-y!\"/>
     <input type=\"hidden\" name=\"type\" value=\"$type\">
     <input type=\"submit\" value=\"Rechercher\"/>
   </form>
@@ -115,6 +117,39 @@
   }
 
 ?>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$( function() {
+	var projects = [
 
+		<?php
+
+
+		//inclusion des tableaux Hierarchie et Recettes
+		 include 'Donnees.inc.php';
+
+		 foreach ($Hierarchie as $key => $value) {
+			 echo "{label:"."\"".$key."\""."},";
+		 }
+
+		?>
+	];
+
+	$( "#recherche" ).autocomplete({
+		minLength: 0,
+		source: projects,
+		focus: function( event, ui ) {
+			$( "#project" ).val( ui.item.label );
+			return false;
+		},
+	})
+	.autocomplete( "instance" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+			.append( "<div>" + item.label + "</div>" )
+			.appendTo( ul );
+	};
+} );
+</script>
 </body>
 </html>
